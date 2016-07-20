@@ -3,6 +3,7 @@
   <head>
     <title>BijyoCollector</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
   </head>
   <body>
@@ -11,14 +12,13 @@
       <div class="row">
         <div class="col-md-6">
           <p>Push Button! it makes you happy!!!</p>
-          <canvas id="main"></canvas>
           <p>
             <button id="test" class="btn btn-default">Get the Picture</button>
           </p>
           <table id="output" class="table">
             <tr>
               <th class="col-md-3">retrieve</th>
-              <th class="col-md-3">crop</th>
+              <th class="col-md-3">trim</th>
             </tr>
             <tr>
               <td><img width="150" /></td>
