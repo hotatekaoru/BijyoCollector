@@ -30,7 +30,7 @@ def retrieve():
         photo["imgName"] = imgName
         # 実験用に画像を2箇所に保存
         urllib.request.urlretrieve(thumb, const.PATH_RET + imgName)
-        urllib.request.urlretrieve(thumb, const.PATH_TRIM + imgName)
+        urllib.request.urlretrieve(thumb, const.PATH_RECT + imgName)
 
     print(data)
     print("End retrieve")
