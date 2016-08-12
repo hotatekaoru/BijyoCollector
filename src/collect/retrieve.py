@@ -1,7 +1,7 @@
 import json
 import urllib
 import constants as const
-
+import os.path
 
 ####################################################################
 # Bjin.MeのAPIから画像を取得・保存する
@@ -18,6 +18,7 @@ def retrieve():
     print("Start retrieve")
     # 画像を取得
     url = 'http://bjin.me/api/?type=rand&count=' + str(const.IMAGES_NUM) + '&format=json'
+    train_url = 'http://bjin.me/api/?type=detail&count=1&format=json&id=' + str(const.IMAGES_NUM)
     html = urllib.request.urlopen(url).read()
     data = json.loads(html.decode('utf8'))
 
@@ -35,3 +36,12 @@ def retrieve():
     print(data)
     print("End retrieve")
     return data
+
+def searchImgId():
+    print("Start searchImgId")
+    count = 1
+    while os.path.isfile(const.PATH_RET + str(count) + '.jpg'):
+        count += 1
+
+    print("End searchImgId")
+    return str(count)

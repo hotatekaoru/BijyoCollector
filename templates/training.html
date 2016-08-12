@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BijyoTraining</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/training.js') }}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>BijyoTraining</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <form name="formm">
+            <input id="imgNum" value={{ imgNum }}>
+            <button id="training" class="btn btn-primary">Get the Picture</button>
+          </form>
+          <p id="aaa" value="aaa"></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
