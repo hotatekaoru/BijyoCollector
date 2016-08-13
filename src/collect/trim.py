@@ -1,6 +1,4 @@
 import cv2
-import numpy as np
-import glob
 import constants as const
 
 ####################################################################
@@ -9,8 +7,8 @@ import constants as const
 #    dicts: 取得した画像情報
 ####################################################################
 def trim(dicts):
-    print("Start trim")
-    cascade_path = "/usr/local/opt/opencv/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml"
+    print('Start trim')
+    cascade_path = '/usr/local/opt/opencv/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
 
     # カスケード分類器の特徴量を取得する
     cascade = cv2.CascadeClassifier(cascade_path)
@@ -20,8 +18,8 @@ def trim(dicts):
     # データを入れる配列
     for dict in dicts:
         # ファイル読み込み
-        rectPath = const.PATH_RECT + dict["imgName"]
-        trimPath = const.PATH_TRIM + dict["imgName"]
+        rectPath = const.PATH_RECT + dict['imgName']
+        trimPath = const.PATH_TRIM + dict['imgName']
         image = cv2.imread(rectPath)
 
         # グレースケール変換
@@ -54,7 +52,7 @@ def trim(dicts):
 
             success += 1
 
-    print("画像取得数: " + str(len(dicts)))
-    print("顔認識成功数: " + str(success))
+    print('画像取得数: ' + str(len(dicts)))
+    print('顔認識成功数: ' + str(success))
 
     return

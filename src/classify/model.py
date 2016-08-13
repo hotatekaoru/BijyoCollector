@@ -1,4 +1,3 @@
-import sys
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -17,6 +16,7 @@ flags.DEFINE_integer('max_steps', 200, 'Number of steps to run trainer.')
 flags.DEFINE_integer('batch_size', 10, 'Batch size. Must divide evenly into the dataset sizes.')
 flags.DEFINE_float('learning_rate', 1e-4, 'Initial learning rate.')
 
+
 ####################################################################
 # 予測モデルを作成する
 #  引数:
@@ -26,7 +26,6 @@ flags.DEFINE_float('learning_rate', 1e-4, 'Initial learning rate.')
 #   y_conv: 各クラスの確率
 ####################################################################
 def inference(images_placeholder, keep_prob):
-
     # 重みを標準偏差0.1の正規分布で初期化
     def weight_variable(shape):
         initial = tf.truncated_normal(shape, stddev=0.1)
@@ -90,6 +89,7 @@ def inference(images_placeholder, keep_prob):
     # 各ラベルの確率のようなものを返す
     return y_conv
 
+
 ####################################################################
 # 損失を計算する
 #  引数:
@@ -99,12 +99,12 @@ def inference(images_placeholder, keep_prob):
 #   cross_entropy: 交差エントロピーのtensor, float
 ####################################################################
 def loss(logits, labels):
-
     # 交差エントロピーの計算
     cross_entropy = -tf.reduce_sum(labels * tf.log(logits))
     # TensorBoardで表示するよう指定
-    tf.scalar_summary("cross_entropy", cross_entropy)
+    tf.scalar_summary('cross_entropy', cross_entropy)
     return cross_entropy
+
 
 ####################################################################
 # lossを最小化するtrain_opを導出する
@@ -115,9 +115,9 @@ def loss(logits, labels):
 #   train_step: 訓練のOp
 ####################################################################
 def training(loss, learning_rate):
-
     train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
     return train_step
+
 
 ####################################################################
 # 正解率(accuracy)を計算する
@@ -128,14 +128,15 @@ def training(loss, learning_rate):
 #   accuracy: 正解率(float)
 ####################################################################
 def accuracy(logits, labels):
-
     correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    tf.scalar_summary("accuracy", accuracy)
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
+    tf.scalar_summary('accuracy', accuracy)
     return accuracy
+
 
 ####################################################################
 # training用の関数
+# python src/classify/model.pyで起動
 ####################################################################
 if __name__ == '__main__':
     # ファイルを開く
@@ -149,7 +150,6 @@ if __name__ == '__main__':
         l = line.split()
         # 画像を読込む
         img = cv2.imread(FLAGS.img_path + l[0])
-        print("train_imgName => " + l[0])
         # 一列にした後、0-1のfloat値にする
         train_image.append(img.flatten().astype(np.float32) / 255.0)
         # ラベルを1-of-k方式で用意する
@@ -168,7 +168,6 @@ if __name__ == '__main__':
         line = line.rstrip()
         l = line.split()
         img = cv2.imread(FLAGS.img_path + l[0])
-        print("test_imgName => " + l[0])
         test_image.append(img.flatten().astype(np.float32) / 255.0)
         tmp = np.zeros(NUM_CLASSES)
         tmp[int(l[1])] = 1
@@ -179,11 +178,11 @@ if __name__ == '__main__':
 
     with tf.Graph().as_default():
         # 画像を入れる仮のTensor
-        images_placeholder = tf.placeholder("float", shape=(None, IMAGE_PIXELS))
+        images_placeholder = tf.placeholder('float', shape=(None, IMAGE_PIXELS))
         # ラベルを入れる仮のTensor
-        labels_placeholder = tf.placeholder("float", shape=(None, NUM_CLASSES))
+        labels_placeholder = tf.placeholder('float', shape=(None, NUM_CLASSES))
         # dropout率を入れる仮のTensor
-        keep_prob = tf.placeholder("float")
+        keep_prob = tf.placeholder('float')
 
         # inference()を呼び出してモデルを作る
         logits = inference(images_placeholder, keep_prob)
@@ -221,7 +220,7 @@ if __name__ == '__main__':
                 labels_placeholder: train_label,
                 keep_prob: 1.0})
             print(
-            "step %d, training accuracy %g" % (step, train_accuracy))
+                "step %d, training accuracy %g" % (step, train_accuracy))
 
             # 1 step終わるたびにTensorBoardに表示する値を追加する
             summary_str = sess.run(summary_op, feed_dict={
@@ -232,10 +231,10 @@ if __name__ == '__main__':
 
     # 訓練が終了したらテストデータに対する精度を表示
     print(
-    "test accuracy %g" % sess.run(acc, feed_dict={
-        images_placeholder: test_image,
-        labels_placeholder: test_label,
-        keep_prob: 1.0}))
+        "test accuracy %g" % sess.run(acc, feed_dict={
+            images_placeholder: test_image,
+            labels_placeholder: test_label,
+            keep_prob: 1.0}))
 
     # 最終的なモデルを保存
-    save_path = saver.save(sess, "model.ckpt")
+    save_path = saver.save(sess, 'model.ckpt')
