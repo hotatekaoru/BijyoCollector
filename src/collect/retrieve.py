@@ -7,9 +7,9 @@ import constants as const
 
 
 ####################################################################
-# Bjin.MeのAPIから画像を取得・保存する（ランダム）
+# Bjin.MeのAPIから画像を取得・保存する（本番用）
 #  返り値:
-#    data: 取得した画像を辞書型で返却する
+#    data: 取得した画像群を辞書型で返却する
 #        ID：コンテンツ特定ID
 #        category：人名（空の場合あるっぽい）
 #        thumb：画像（サムネイル）
@@ -25,12 +25,12 @@ def retrieve():
     data = json.loads(html.decode('utf8'))
 
     # JSONで取得した画像リストを1件ずつ処理
-    for photo in data:
-        thumb = photo['thumb']
+    for image in data:
+        thumb = image['thumb']
         # サムネイルの画像名部分（XXXXX.jpg）を取得
         imgName = thumb.split('/')[-1]
         # 辞書型に画像名を表すimgName要素を追加
-        photo['imgName'] = imgName
+        image['imgName'] = imgName
         # 実験用に画像を2箇所に保存
         urllib.request.urlretrieve(thumb, const.PATH_RET + imgName)
         urllib.request.urlretrieve(thumb, const.PATH_RECT + imgName)
@@ -42,7 +42,7 @@ def retrieve():
 # Bjin.MeのAPIからトレーニング画像を取得する
 # トレーニング済みの場合は画面出力しない
 #  返り値:
-#    data: 取得した画像を辞書型で返却する
+#    image: 取得した画像1枚を辞書型で返却する
 #        ID：コンテンツ特定ID
 #        category：人名（空の場合あるっぽい）
 #        thumb：画像（サムネイル）
@@ -59,23 +59,23 @@ def getTrainingImg():
         html = urllib.request.urlopen(url).read()
         data = json.loads(html.decode('utf8'))
 
-        photo = data[0]
-        print(photo)
+        image = data[0]
+        print(image)
         # 画像が仕分け済みの場合、画面表示しない
-        if isAlreadyTraining(str(math.floor(photo['id']))):
+        if isAlreadyTraining(str(math.floor(image['id']))):
             continue
-        thumb = photo['thumb']
+        thumb = image['thumb']
         # サムネイルの画像名部分（XXXXX.jpg）を取得
         imgName = thumb.split('/')[-1]
         # 辞書型に画像名を表すimgName要素を追加
-        photo['imgName'] = imgName
-        # 実験用に画像を2箇所に保存
+        image['imgName'] = imgName
+        # 画像を保存
         urllib.request.urlretrieve(thumb, const.PATH_RET + imgName)
         urllib.request.urlretrieve(thumb, const.PATH_RECT + imgName)
         break
     print('End getTrainingImg')
 
-    return data
+    return image
 
 ####################################################################
 # 画像番号が仕分け済みか判定する
@@ -85,7 +85,6 @@ def getTrainingImg():
 #    判定結果: True（仕分け済み）、False（未仕分け）
 ####################################################################
 def isAlreadyTraining(num):
-    print('isAlreadyTraining: ' + num)
 
     f = open(const.PATH_TRIM + 'train.txt', 'r')
     for line in f:

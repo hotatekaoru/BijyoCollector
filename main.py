@@ -12,11 +12,14 @@ def isAlreadyTraining(num):
     return rt.isAlreadyTraining(num)
 def trim(ret_images):
     return tr.trim(ret_images)
+def enableTrim(training_image):
+    return tr.enableTrim(training_image)
 
 # webapp
 from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
+
 
 @app.route('/api/collect', methods=['POST'])
 def collect():
@@ -43,6 +46,17 @@ def main():
 def transitTraining():
     return render_template('training.html')
 
+
 @app.route('/api/training', methods=['POST'])
 def training():
-    return jsonify(results=getTrainingImg())
+
+    # BijyoCollectorが顔認識できる画像のみを抽出する
+    while True:
+        # 画像取得
+        training_image = getTrainingImg()
+        # 顔認識
+        if enableTrim(training_image):
+            break
+
+    print('End Training')
+    return jsonify(results=training_image)

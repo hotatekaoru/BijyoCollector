@@ -55,4 +55,28 @@ def trim(dicts):
     print('画像取得数: ' + str(len(dicts)))
     print('顔認識成功数: ' + str(success))
 
-    return
+####################################################################
+# 顔の切出可能か判定
+#  引数:
+#    dict: 取得した画像情報
+#  返り値:
+#    result: true:切出可能
+####################################################################
+def enableTrim(dict):
+
+    cascade_path = '/usr/local/opt/opencv/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml'
+
+    # カスケード分類器の特徴量を取得する
+    cascade = cv2.CascadeClassifier(cascade_path)
+
+    # ファイル読み込み
+    rectPath = const.PATH_RECT + dict['imgName']
+    image = cv2.imread(rectPath)
+
+    # グレースケール変換
+    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # 物体認識（顔認識）の実行
+    facerect = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=1, minSize=(1, 1))
+
+    return len(facerect) > 0

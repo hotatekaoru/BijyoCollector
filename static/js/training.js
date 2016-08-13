@@ -1,21 +1,19 @@
 /*global $*/
 $(function() {
     $('#training').click(function() {
-        var json = JSON.stringify({ imgNum: $('#imgNum').val()});
+        /*var json = JSON.stringify({ imgNum: $('#imgNum').val()});*/
         $.ajax({
             url: '/api/training',
             method: 'POST',
             contentType: 'application/json',
-            data: json,
+            data: "",
             success: function(data) {
-               for (var j = 0; j < data.results.length; j++) {
-                   img = $('#output tr').eq(j+1).find('td').eq(0).find('img'
-                   img.attr('src', "static/img/retrieve/" + data.results[j].imgName);
-                   img.append(img);
-                   img2 = $('#output tr').eq(j+1).find('td').eq(1).find('img')
-                   img2.attr('src', "static/img/trim/" + data.results[j].imgName);
-                   img2.append(img2);
-                }
+                img = $('#image');
+                img.attr('src', "static/img/retrieve/" + data.results.imgName);
+                img.append(img);
+                id = $('#imgId');
+                id.attr('value', data.results.id);
+                id.append(id);
             }
         });
     });

@@ -11,8 +11,7 @@
       <h1>BijyoTraining</h1>
       <div class="row">
         <div class="col-md-6">
-          <form name="form">
-            <button id="training" class="btn btn-primary">Get the Picture</button>
+          <button id="training" class="btn btn-primary">Get the Picture</button>
 
             <table id="output" class="table">
               <tr>
@@ -20,24 +19,36 @@
                 <th class="col-md-3">rank</th>
               </tr>
               <tr>
-                <td><img width="150" /></td>
+                <td><img id="image" width="150" /></td>
                 <td>
-                  <div class="btn-group" data-toggle="buttons">
-                    <input id="rank0" type="radio" name="rank" value="0">
-                    <label for="rank0">0</label>
-                    <input id="rank1" type="radio" name="rank" value="1" checked="checked">
-                    <label for="rank1">1</label>
-                    <input id="rank2" type="radio" name="rank" value="2">
-                    <label for="rank2">2</label>
-                    <input id="rank3" type="radio" name="rank" value="3">
-                    <label for="rank3">3</label>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="rank" value="0">0
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="rank" value="1" checked>1
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="rank" value="2">2
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="rank" value="3">3
+                    </label>
+                  </div>
+                  <input id="imgId" type="hidden" name="imgId">
+                  <div>
+                    <button id="assort" class="btn btn-primary">Assort</button>
                   </div>
                 </td>
               </tr>
             </table>
-            <button id="assort" class="btn btn-primary">Assort</button>
 
-          </form>
         </div>
       </div>
     </div>
