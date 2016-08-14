@@ -11,7 +11,7 @@
       <h1>BijyoTraining</h1>
       <div class="row">
         <div class="col-md-6">
-          <button id="training" class="btn btn-primary">Get the Picture</button>
+          <button id="training" class="btn btn-primary">画像取得</button>
 
             <table id="output" class="table">
               <tr>
@@ -21,34 +21,38 @@
               <tr>
                 <td><img id="image" width="150" /></td>
                 <td>
+                  <form name="form">
                   <div class="radio">
                     <label>
-                      <input type="radio" name="rank" value="0">0
+                      <input type="radio" name="rank" value="0">0：ｍ(｡≧Д≦｡)ｍ
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <input type="radio" name="rank" value="1" checked>1
+                      <input type="radio" name="rank" value="1" checked>1：微妙（ーxー;）
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <input type="radio" name="rank" value="2">2
+                      <input type="radio" name="rank" value="2">2：かわいい（｡･ω･｡）
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <input type="radio" name="rank" value="3">3
+                      <input type="radio" name="rank" value="3">3：最高にかわいいヾ（≧▽≦）ﾉ
                     </label>
                   </div>
                   <input id="imgId" type="hidden" name="imgId">
+                  </form>
                   <div>
-                    <button id="assort" class="btn btn-primary">Assort</button>
+                    <button id="assort" class="btn btn-primary">判定</button>
                   </div>
                 </td>
               </tr>
             </table>
-
+          <div>
+            <a href="/">戻る</a>
+          </div>
         </div>
       </div>
     </div>

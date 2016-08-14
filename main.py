@@ -12,6 +12,8 @@ def isAlreadyTraining(num):
     return rt.isAlreadyTraining(num)
 def trim(ret_images):
     return tr.trim(ret_images)
+def trimTraining(imgId, rank):
+    return tr.trimTraining(imgId, rank)
 def enableTrim(training_image):
     return tr.enableTrim(training_image)
 
@@ -58,5 +60,13 @@ def training():
         if enableTrim(training_image):
             break
 
-    print('End Training')
     return jsonify(results=training_image)
+
+
+@app.route('/api/assort', methods=['POST'])
+def assort():
+
+    trimTraining(request.json['imgId'], request.json['rank'])
+    return training()
+
+

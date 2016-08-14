@@ -1,11 +1,13 @@
 import cv2
 import numpy as np
+import sys
 import tensorflow as tf
 
 NUM_CLASSES = 4
 IMAGE_SIZE = 112
 IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE * 3
 
+''' コンソールから直接モデルを呼び出す可能性があるため、定数をファイル内に記載する'''
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_string('train', 'train.txt', 'File name of train data')
@@ -89,7 +91,6 @@ def inference(images_placeholder, keep_prob):
     # 各ラベルの確率のようなものを返す
     return y_conv
 
-
 ####################################################################
 # 損失を計算する
 #  引数:
@@ -105,7 +106,6 @@ def loss(logits, labels):
     tf.scalar_summary('cross_entropy', cross_entropy)
     return cross_entropy
 
-
 ####################################################################
 # lossを最小化するtrain_opを導出する
 #  引数:
@@ -117,7 +117,6 @@ def loss(logits, labels):
 def training(loss, learning_rate):
     train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
     return train_step
-
 
 ####################################################################
 # 正解率(accuracy)を計算する
@@ -133,12 +132,12 @@ def accuracy(logits, labels):
     tf.scalar_summary('accuracy', accuracy)
     return accuracy
 
+####################################################################
+# tensorflowにtrain.txtの画像を全て学習させ、
+# tensorflowにtest.txtの画像を全て予測させる
+####################################################################
+def study():
 
-####################################################################
-# training用の関数
-# python src/classify/model.pyで起動
-####################################################################
-if __name__ == '__main__':
     # ファイルを開く
     f = open(FLAGS.img_path + FLAGS.train, 'r')
     # データを入れる配列
@@ -161,6 +160,7 @@ if __name__ == '__main__':
     train_label = np.asarray(train_label)
     f.close()
 
+    '''
     f = open(FLAGS.img_path + FLAGS.test, 'r')
     test_image = []
     test_label = []
@@ -175,6 +175,7 @@ if __name__ == '__main__':
     test_image = np.asarray(test_image)
     test_label = np.asarray(test_label)
     f.close()
+    '''
 
     with tf.Graph().as_default():
         # 画像を入れる仮のTensor
@@ -229,12 +230,63 @@ if __name__ == '__main__':
                 keep_prob: 1.0})
             summary_writer.add_summary(summary_str, step)
 
+    '''
     # 訓練が終了したらテストデータに対する精度を表示
     print(
         "test accuracy %g" % sess.run(acc, feed_dict={
             images_placeholder: test_image,
             labels_placeholder: test_label,
             keep_prob: 1.0}))
-
+    '''
     # 最終的なモデルを保存
-    save_path = saver.save(sess, 'model.ckpt')
+    saver.save(sess, 'model.ckpt')
+
+####################################################################
+# 予測用関数
+#  返り値:
+#   results: 予測結果を表す二重配列 [画像名、予測値（0〜3）]
+####################################################################
+def predict():
+
+    # モデル読み込み
+    images_placeholder = tf.placeholder("float", shape=(None, IMAGE_PIXELS))
+    keep_prob = tf.placeholder("float")
+
+    logits = inference(images_placeholder, keep_prob)
+    sess = tf.InteractiveSession()
+
+    saver = tf.train.Saver()
+    sess.run(tf.initialize_all_variables())
+    saver.restore(sess, "model.ckpt")
+
+    # 予測対象の画像読み込み
+    f = open(FLAGS.img_path + FLAGS.test, 'r')
+
+    results = []
+
+    for line in f:
+        line = line.rstrip()
+        l = line.split()
+        img = cv2.imread(FLAGS.img_path + l[0])
+        image = img.flatten().astype(np.float32)/255.0
+
+        # 画像の予測
+        pred = np.argmax(logits.eval(feed_dict={
+            images_placeholder: [image],
+            keep_prob: 1.0})[0])
+        print(l[0] + ' => ' + str(pred))
+        result = {l[0], pred}
+        results.append(result)
+    f.close()
+
+    return results
+
+####################################################################
+# コンソールから直接学習・予測させる場合、
+# python src/classify/model.pyで起動
+####################################################################
+if __name__ == '__main__':
+    if len(sys.argv) > 1 and "1" == sys.argv[1]:
+        study()
+    else:
+        predict()

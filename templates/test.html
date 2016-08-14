@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BijyoTest</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/training.js') }}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>BijyoTest</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <form name="form">
+            <div>
+              <input type="file" name="uploadImg" size="30" value=""/>
+            </div>
+            <div>
+              <button id="training" class="btn btn-primary">アップロード</button>
+            </div>
+          </form>
+          <a href="/">戻る</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
