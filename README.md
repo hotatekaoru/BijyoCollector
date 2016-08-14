@@ -1,9 +1,10 @@
 # BijyoCollector
-====
 BijyoCollectorは、自分が好む顔画像を識別し、表示するWebアプリです。
 ディープラーニングにより、ユーザーの好みの顔を学習しています。
 
 BijyoCollector is Web application which displays face photos you want by deep learning.
+
+====
 
 ## Description
 BijyoCollectorは、学習・識別の2機能があります。
